@@ -1,0 +1,34 @@
+# =============== #
+# Unity generated #
+# =============== #
+Temp/
+Library/
+# add by nobodyzxc
+Assets/Field/Stylized Nature Environment/Sky/Materials/No Name.mat
+Assets/Field/Stylized Nature Environment/Sky/Materials/No Name.mat.meta
+
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+ExportedObj/
+obj/
+*.svd
+*.userprefs
+/*.csproj
+*.pidb
+*.suo
+/*.sln
+*.user
+*.unityproj
+*.booproj
+
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

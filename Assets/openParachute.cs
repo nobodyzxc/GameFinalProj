@@ -36,19 +36,6 @@ public class openParachute : MonoBehaviour {
 	}
 
 	void open(){
-		//Quaternion parRot =  transform.rotation / ;
-		//Vector3 parTras = transform.parent.parent.localPosition + new Vector3(0, 0.8f,0.5f);
-		/*
-		parachute = Instantiate(parachuteInst ,
-			parTras , 
-			transform.rotation, transform);
-		*/
-
-		parachute = Instantiate(parachuteInst ,
-			transform.position + new Vector3(0, 0.8f, 0.5f) * transform.localRotation.eulerAngles.normalized.y  , transform.rotation, transform);
-		bar = Instantiate(ptr ,
-			transform.parent.parent.position +new Vector3(0, 0.8f,0.5f), 
-			transform.rotation, transform);
-		return;
+		parachute = Instantiate(parachuteInst , transform.position, transform.rotation, transform);
 	}
 }

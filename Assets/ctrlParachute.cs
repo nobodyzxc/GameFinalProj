@@ -7,7 +7,7 @@ public class ctrlParachute : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		transform.localScale = Vector3.zero;
-		gameObject.transform.GetChild (1).transform.position = transform.parent.transform.position;
+		transform.localPosition += new Vector3 (0.85f, 4f, 3f); 
 	}
 	
 	// Update is called once per frame

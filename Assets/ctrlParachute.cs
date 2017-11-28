@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ctrlParachute : MonoBehaviour {
-
+	public float size = 0f;
+	//public GameObject player;
+	public Rigidbody player;
 	// Use this for initialization
 	void Start () {
 		transform.localScale = Vector3.zero;
@@ -12,8 +14,10 @@ public class ctrlParachute : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (transform.localScale.x < 1f) {
-			transform.localScale += new Vector3(0.1f , 0.1f , 0.1f);
+		if (size < 1f) {
+			size += 0.05f;
+			float ns = size * size;
+			transform.localScale = new Vector3(ns , ns , ns);
 		}
 	}
 

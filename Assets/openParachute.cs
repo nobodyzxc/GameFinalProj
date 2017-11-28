@@ -27,7 +27,7 @@ public class openParachute : MonoBehaviour {
 				parachute = null;
 			} else {
 				open ();
-				player.GetComponent<Rigidbody> ().drag = 2f;
+				player.GetComponent<Rigidbody> ().drag = 0.9f;
 			}
 		}
 		if (Input.GetKeyDown (KeyCode.V)) {

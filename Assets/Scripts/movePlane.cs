@@ -16,7 +16,7 @@ public class movePlane : MonoBehaviour {
 		startPos = transform.position;
 		rbody = gameObject.GetComponent<Rigidbody> ();
 		//rbody.AddForce(new Vector3(force , 0 , force));
-		prbody.AddForce(new Vector3(force , 0 , force));
+		//prbody.AddForce(new Vector3(force , 0 , force));
 		playerOffset = dist (player, gameObject);
 	}
 

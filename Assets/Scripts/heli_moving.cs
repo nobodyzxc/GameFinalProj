@@ -10,13 +10,25 @@ public class heli_moving : MonoBehaviour {
 	float rot;
 	public GameObject uprot, tailrot;
 	public GameObject playerbeforejumping;
+	public GameObject destination;
+	public GameObject heli;
+	float step = 20f;
+	float spinStep = 1f;
+
 
 	void Start(){
-		rot=transform.rotation.y;
-		GetComponent<Rigidbody> ().velocity = new Vector3 (-speed * Mathf.Sin (rot), 0, -speed * Mathf.Cos (rot));
-		playerbeforejumping.GetComponent<Rigidbody> ().velocity = new Vector3 (-speed * Mathf.Sin (rot), 0, -speed * Mathf.Cos (rot));
 	}
 	void Update(){
+		if (true) {
+			Vector3 tardir = (transform.position - destination.transform.position).normalized;
+			tardir = new Vector3 (tardir.x, 0f, tardir.z);
+			Vector3 newdir = Vector3.RotateTowards (transform.forward, tardir, spinStep * Time.deltaTime, 0.0f);
+			transform.rotation = Quaternion.LookRotation (newdir);
+		}
+
+		transform.position = Vector3.MoveTowards(transform.position, destination.transform.position, step * Time.deltaTime);
+
+
 //		Debug.Log (playerbeforejumping.GetComponent<Rigidbody> ().velocity);
 //		Debug.Log(timeA);
 		uprot.transform.rotation=Quaternion.Euler(new Vector3(0, uprotateSpeed*timeA,5.03f));

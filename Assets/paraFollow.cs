@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class paraFollow : MonoBehaviour {
 
-	Vector3 offset;
+	public Vector3 offset;
 	public GameObject player;
 	// Use this for initialization
 	void Start () {
-		offset = transform.position - player.transform.position;
+		offset = player.transform.localPosition;
 	}
 
 	// Update is called once per frame
 	void LateUpdate () {
-		transform.position = player.transform.position + offset;
+		transform.localPosition = offset + new Vector3(0f, 1.1f, -0.2f);
 	}
 }

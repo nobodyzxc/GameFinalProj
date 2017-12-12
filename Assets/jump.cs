@@ -8,6 +8,8 @@ public class jump : MonoBehaviour {
 	Rigidbody rbody;
 	int state = 0;
 	int paraOpenTime = 0;
+	float charaSpeed;
+	Vector3 chara_pre_Pos;
 	public GameObject parachute;
 	public GameObject parachuteInst;
 	public Vector3 offset;
@@ -31,6 +33,8 @@ public class jump : MonoBehaviour {
 				animtor.SetInteger ("state", 1);
 				transform.parent.parent = transform.parent.parent.parent;
 				rbody.useGravity = true;
+
+				rbody.velocity = (transform.position - chara_pre_Pos) / Time.deltaTime;
 				//Vector3 v3Force = 100f * transform.forward;
 				//rbody.AddForce (v3Force);
 			} else if (state == 2) {
@@ -45,6 +49,7 @@ public class jump : MonoBehaviour {
 			if(rbody.velocity != Vector3.zero)
 				print (rbody.velocity);
 		}
+		chara_pre_Pos = transform.position;
 	}
 
 

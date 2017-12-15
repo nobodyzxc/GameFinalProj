@@ -19,6 +19,7 @@ public class heli_moving : MonoBehaviour {
 	void Start(){
 	}
 	void Update(){
+		return;
 		if (true) {
 			Vector3 tardir = (transform.position - destination.transform.position).normalized;
 			tardir = new Vector3 (tardir.x, 0f, tardir.z);

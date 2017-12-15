@@ -6,7 +6,7 @@ public class jump : MonoBehaviour {
 	Animator animtor;
 	public Animator paraAnim;
 	Rigidbody rbody;
-	int state = 0;
+	public int state = 0;
 	int paraOpenTime = 0;
 	float charaSpeed;
 	Vector3 chara_pre_Pos;

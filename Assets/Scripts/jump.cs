@@ -18,7 +18,8 @@ public class jump : MonoBehaviour {
 	public GameObject test;
 	public GameObject topCam;
 	public GameObject backCam;
-
+	float gra = 3f; //4.9f;
+	public ConstantForce CF;
 	void switchCam(){
 		bool t = topCam.activeSelf;
 		backCam.SetActive (t);
@@ -26,15 +27,17 @@ public class jump : MonoBehaviour {
 	}
 		
 	void Start () {
-		float gra = 9.8f; //4.9f;
+		
 		//rbody = gameObject.GetComponent<Rigidbody> ();
 		rbody = GetComponent<Rigidbody>();
-		animtor = transform.GetChild(0).gameObject.GetComponent<Animator> ();	
-		Physics.gravity = new Vector3 (0f, -gra, 0f);
+		animtor = transform.GetChild(0).gameObject.GetComponent<Animator> ();
+		//Physics.gravity = new Vector3 (0f, -gra, 0f);
 	}
 
 	// Update is called once per frame
 	void Update () {
+		if(state >= 1 && state < 3)
+			CF.relativeForce = new Vector3 (0f, -gra+2, 0f);
 		//print (Physics.gravity);
 		//print (rbody.velocity);
 		if (state == 2) {
@@ -43,15 +46,37 @@ public class jump : MonoBehaviour {
 			float torque = 0.5f;
 			if (Input.GetKey (KeyCode.RightArrow)) {
 				//transform.RotateAround (test.transform.position, Vector3.forward, 20 * Time.deltaTime);
-				transform.Rotate (new Vector3 (0, 0, 1));
+				transform.Rotate (new Vector3 (0, 0, -1));
 				rbody.AddTorque (0, torque, 0);
 				print (transform.rotation);
 			}
 			if (Input.GetKey (KeyCode.LeftArrow)) {
-				transform.Rotate (new Vector3 (0, 0, -1));
+				transform.Rotate (new Vector3 (0, 0, 1));
 				rbody.AddTorque (0, -torque, 0);
 			}
+			if (Input.GetKey (KeyCode.UpArrow)) {
+				transform.Rotate (new Vector3 (1, 0, 0));
+			}
+			if (Input.GetKey (KeyCode.DownArrow)) {
+				transform.Rotate (new Vector3 (-1, 0, 0));
+			}
 		}
+		if (state == 3) {
+			CF.enabled = false;
+			if (Input.GetKey (KeyCode.RightArrow)) {
+				transform.Rotate (new Vector3 (0, 0, -1));
+			}
+			if (Input.GetKey (KeyCode.LeftArrow)) {
+				transform.Rotate (new Vector3 (0, 0, 1));
+			}
+			if (Input.GetKey (KeyCode.UpArrow)) {
+				transform.Rotate (new Vector3 (1, 0, 0));
+			}
+			if (Input.GetKey (KeyCode.DownArrow)) {
+				transform.Rotate (new Vector3 (-1, 0, 0));
+			}
+		}
+
 
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			state += 1;

@@ -18,7 +18,7 @@ public class jump : MonoBehaviour {
 	public GameObject test;
 	public GameObject topCam;
 	public GameObject backCam;
-	float gra = 3f; //4.9f;
+	float gra = 9.8f; //4.9f;
 	public ConstantForce CF;
 	void switchCam(){
 		bool t = topCam.activeSelf;
@@ -34,27 +34,43 @@ public class jump : MonoBehaviour {
 		//Physics.gravity = new Vector3 (0f, -gra, 0f);
 	}
 
-	// Update is called once per frame
+	float approach(float v , int a , int b){
+		if (Mathf.Abs (v - a) > Mathf.Abs (v - b))
+			return b;
+		return a;
+	}
+
 	void Update () {
-		if(state >= 1 && state < 3)
-			CF.relativeForce = new Vector3 (0f, -gra+2, 0f);
+		/*if(state >= 1 && state < 3)
+			CF.relativeForce = new Vector3 (0f, -gra-2, 0f);*/
 		//print (Physics.gravity);
 		//print (rbody.velocity);
 		if (state == 2) {
-			rbody.velocity = transform.forward.normalized * (rbody.velocity.x / rbody.velocity.normalized.x);
+			int fix = 15;
+			print (Mathf.Sin ((rbody.rotation.eulerAngles.x * Mathf.Deg2Rad)));
+			rbody.velocity = transform.forward.normalized 
+				* (rbody.velocity.x / rbody.velocity.normalized.x) 
+				+ new Vector3(0 , -Mathf.Sin((rbody.rotation.eulerAngles.x * Mathf.Deg2Rad)) , 0) * Time.deltaTime * 10;
 			print (transform.rotation);
 			float torque = 0.5f;
+			Quaternion rot = transform.rotation;
+			Vector3 euler = transform.eulerAngles;
+
 			if (Input.GetKey (KeyCode.RightArrow)) {
 				//transform.RotateAround (test.transform.position, Vector3.forward, 20 * Time.deltaTime);
-				transform.Rotate (new Vector3 (0, 0, -1));
+				float nextZ = (euler.z >= 360 - fix || euler.z <= fix)? euler.z - 1 : approach(euler.z, 360 - fix, fix) - 1;
+				transform.eulerAngles = new Vector3 (euler.x, euler.y, nextZ);
+				//	transform.Rotate (transform.right);
 				rbody.AddTorque (0, torque, 0);
-				print (transform.rotation);
 			}
 			if (Input.GetKey (KeyCode.LeftArrow)) {
-				transform.Rotate (new Vector3 (0, 0, 1));
+				//if(rot.eulerAngles.z > 360 - fix|| rot.eulerAngles.z < fix)
+				//	transform.Rotate (-transform.right);
+				float nextZ = (euler.z >= 360 - fix || euler.z <= fix)? euler.z  + 1 : approach(euler.z, 360 - fix, fix) + 1;
+				transform.eulerAngles = new Vector3 (euler.x, euler.y, nextZ);
 				rbody.AddTorque (0, -torque, 0);
 			}
-			if (Input.GetKey (KeyCode.UpArrow)) {
+			if (Input.GetKey (KeyCode.UpArrow)){
 				transform.Rotate (new Vector3 (1, 0, 0));
 			}
 			if (Input.GetKey (KeyCode.DownArrow)) {

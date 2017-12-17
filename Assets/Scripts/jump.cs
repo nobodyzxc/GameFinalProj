@@ -58,9 +58,11 @@ public class jump : MonoBehaviour {
 		//print (rbody.velocity);
 		if (state == 2) {
 			int fix = 15;
-			rbody.velocity = transform.forward.normalized
+			Vector3 nv =  transform.forward.normalized
 				* (rbody.velocity.x / rbody.velocity.normalized.x)
 				+ new Vector3(0 , -Mathf.Sin((rbody.rotation.eulerAngles.x * Mathf.Deg2Rad)) , 0) * Time.deltaTime * 10;
+			if (!float.IsNaN (nv.x))
+				rbody.velocity = nv;
 			float torque = 0.5f;
 			Quaternion rot = transform.rotation;
 			Vector3 euler = transform.eulerAngles;
@@ -71,8 +73,6 @@ public class jump : MonoBehaviour {
 				rbody.AddTorque (0, torque, 0);
 			}
 			if (Input.GetKey (KeyCode.LeftArrow)) {
-				//if(rot.eulerAngles.z > 360 - fix|| rot.eulerAngles.z < fix)
-				//	transform.Rotate (-transform.right);
 				float nextZ = (euler.z >= 360 - fix || euler.z <= fix)? euler.z  + 1 : approach(euler.z, 360 - fix, fix) + 1;
 				transform.eulerAngles = new Vector3 (euler.x, euler.y, nextZ);
 				rbody.AddTorque (0, -torque, 0);
@@ -83,10 +83,19 @@ public class jump : MonoBehaviour {
 			if (Input.GetKey (KeyCode.DownArrow)) {
 				transform.Rotate (new Vector3 (-1, 0, 0));
 			}*/
+			print (transform.rotation);
 
-			transform.Rotate (new Vector3 (1, 0, 0));
-			if (Input.GetKey (KeyCode.LeftShift))
-				transform.Rotate (new Vector3 (-2, 0, 0));
+			if (Input.GetKey (KeyCode.LeftControl)) {
+				transform.Rotate (new Vector3 (-1, 0, 0));
+			} else {
+				Vector3 eu = transform.eulerAngles;
+				transform.eulerAngles = new Vector3 (eu.x + 1, eu.y, eu.z);
+
+					
+				/*if (transform.rotation.eulerAngles.x >= 180)
+					transform.Rotate (new Vector3 (-1, 0, 0)); 
+				*/
+			}
 		}
 		if (state == 3) {
 			CF.enabled = false;
@@ -109,30 +118,32 @@ public class jump : MonoBehaviour {
 			state += 1;
 			if (state == 1) {
 				rbody.useGravity = true;
-				//playerbeforejumping.GetComponent<Rigidbody> ().velocity = new Vector3 (-speed * Mathf.Sin (rot), 0, -speed * Mathf.Cos (rot));
 				animtor.SetInteger ("state", 1);
 				transform.parent = transform.parent.parent;
-				//transform.parent.parent = transform.parent.parent.parent;
 				rbody.useGravity = true;
-
 				rbody.velocity = (transform.position - chara_pre_Pos) / Time.deltaTime;
-				//Vector3 v3Force = 100f * transform.forward;
-				//rbody.AddForce (v3Force);
-			}
-			else if (state == 2) {
+
+			} else if (state == 2) {
 				switchCam ();
 				animtor.SetInteger ("state", 2);
-				//rbody.drag = 0.1f;
-				//rbody.AddForce (100 * transform.forward);
-				rbody.velocity += transform.forward * 80;
-			}
-			else if (state == 3) {
+
+				//rbody.velocity += transform.forward * 80;
+
+
+			} else if (state == 3) {
 				switchCam ();
 
 				animtor.SetInteger ("state", 3);
 				paraAnim.SetInteger ("state", 1);
-				rbody.drag = 0.5f;
+				rbody.drag = 0.8f; /* parachute drag */
 				paraOpenTime = 1;
+			} else if (state == 4) {
+				rbody.drag = 0f;
+				parachuteInst.transform.parent = parachuteInst.transform.parent.parent.parent.parent;
+				parachuteInst.AddComponent<Rigidbody> ();
+				parachuteInst.GetComponent<Rigidbody> ().velocity = -rbody.velocity;
+				parachuteInst.GetComponent<Rigidbody> ().isKinematic = true;
+
 			}
 		}
 		if (paraOpenTime > 0 && paraOpenTime < 600) {
@@ -159,7 +170,7 @@ public class jump : MonoBehaviour {
 				}
 				if(SWAT.transform.parent.parent)
 					SWAT.transform.parent = SWAT.transform.parent.parent;
-				Destroy (parachuteInst);
+				//Destroy (parachuteInst);
 			}
 			if (paraOpenTime < 100) {
 				state = 5;

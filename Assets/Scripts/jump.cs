@@ -160,7 +160,8 @@ public class jump : MonoBehaviour {
 
 	void OnCollisionEnter(Collision collision){
 		if (collision.gameObject.tag == "Ground") {
-
+			if(SWAT.transform.parent != null)
+				SWAT.transform.parent = SWAT.transform.parent.parent;
 			if (state == 3 && paraOpenTime >= 100) {
 				if (!Victory) {
 					animtor.SetTrigger ("Fail");
@@ -168,8 +169,7 @@ public class jump : MonoBehaviour {
 				} else {
 					BackGroundMusic.SetActive (false);
 				}
-				if(SWAT.transform.parent.parent)
-					SWAT.transform.parent = SWAT.transform.parent.parent;
+
 				//Destroy (parachuteInst);
 			}
 			if (paraOpenTime < 100) {

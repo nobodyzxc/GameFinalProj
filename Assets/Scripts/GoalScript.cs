@@ -33,7 +33,7 @@ public class GoalScript : MonoBehaviour {
 			ScoreText.SetActive (false);
 			Destroy (parachute);
 			float dist = Vector3.Distance(player.transform.position, GoalCenter.transform.position);
-			GM.addScore (10000 - dist * 500);
+			GM.addScore (10000 - dist * 200);
 		}
 	}
 }

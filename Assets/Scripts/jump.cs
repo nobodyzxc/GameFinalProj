@@ -44,6 +44,12 @@ public class jump : MonoBehaviour {
 		//Physics.gravity = new Vector3 (0f, -gra, 0f);
 	}
 
+	float approach(float v , int a , int b){
+		if (Mathf.Abs (v - a) > Mathf.Abs (v - b))
+			return b;
+		return a;
+	}
+
 	// Update is called once per frame
 	void Update () {
 		if(state >= 1 && state < 3)
@@ -51,25 +57,36 @@ public class jump : MonoBehaviour {
 		//print (Physics.gravity);
 		//print (rbody.velocity);
 		if (state == 2) {
-			rbody.velocity = transform.forward.normalized * (rbody.velocity.x / rbody.velocity.normalized.x);
-			print (transform.rotation);
+			int fix = 15;
+			rbody.velocity = transform.forward.normalized
+				* (rbody.velocity.x / rbody.velocity.normalized.x)
+				+ new Vector3(0 , -Mathf.Sin((rbody.rotation.eulerAngles.x * Mathf.Deg2Rad)) , 0) * Time.deltaTime * 10;
 			float torque = 0.5f;
+			Quaternion rot = transform.rotation;
+			Vector3 euler = transform.eulerAngles;
+
 			if (Input.GetKey (KeyCode.RightArrow)) {
-				//transform.RotateAround (test.transform.position, Vector3.forward, 20 * Time.deltaTime);
-				transform.Rotate (new Vector3 (0, 0, -1));
+				float nextZ = (euler.z >= 360 - fix || euler.z <= fix)? euler.z - 1 : approach(euler.z, 360 - fix, fix) - 1;
+				transform.eulerAngles = new Vector3 (euler.x, euler.y, nextZ);
 				rbody.AddTorque (0, torque, 0);
-				print (transform.rotation);
 			}
 			if (Input.GetKey (KeyCode.LeftArrow)) {
-				transform.Rotate (new Vector3 (0, 0, 1));
+				//if(rot.eulerAngles.z > 360 - fix|| rot.eulerAngles.z < fix)
+				//	transform.Rotate (-transform.right);
+				float nextZ = (euler.z >= 360 - fix || euler.z <= fix)? euler.z  + 1 : approach(euler.z, 360 - fix, fix) + 1;
+				transform.eulerAngles = new Vector3 (euler.x, euler.y, nextZ);
 				rbody.AddTorque (0, -torque, 0);
 			}
-			if (Input.GetKey (KeyCode.UpArrow)) {
+			/*if (Input.GetKey (KeyCode.UpArrow)){
 				transform.Rotate (new Vector3 (1, 0, 0));
 			}
 			if (Input.GetKey (KeyCode.DownArrow)) {
 				transform.Rotate (new Vector3 (-1, 0, 0));
-			}
+			}*/
+
+			transform.Rotate (new Vector3 (1, 0, 0));
+			if (Input.GetKey (KeyCode.LeftShift))
+				transform.Rotate (new Vector3 (-2, 0, 0));
 		}
 		if (state == 3) {
 			CF.enabled = false;
@@ -140,7 +157,8 @@ public class jump : MonoBehaviour {
 				} else {
 					BackGroundMusic.SetActive (false);
 				}
-				SWAT.transform.parent = SWAT.transform.parent.parent;
+				if(SWAT.transform.parent.parent)
+					SWAT.transform.parent = SWAT.transform.parent.parent;
 				Destroy (parachuteInst);
 			}
 			if (paraOpenTime < 100) {

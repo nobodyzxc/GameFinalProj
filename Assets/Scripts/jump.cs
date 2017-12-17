@@ -135,6 +135,8 @@ public class jump : MonoBehaviour {
 				if (!Victory) {
 					animtor.SetTrigger ("Fail");
 					StartCoroutine (RetryGame ());
+				} else {
+					BackGroundMusic.SetActive (false);
 				}
 				SWAT.transform.parent = SWAT.transform.parent.parent;
 				Destroy (parachuteInst);

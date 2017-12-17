@@ -8,11 +8,15 @@ public class GoalScript : MonoBehaviour {
 	public jump playerJump;
 	public GameObject GoalCenter;
 	public GameObject parachute;
+	AudioSource audioSource;
+	public GameObject VictoryPanel;
+	public GameObject ScoreText;
 	GameManager GM;
 	jump jp;
 	// Use this for initialization
 	void Start () {
 		GM = GameObject.Find ("GameManager").GetComponent<GameManager> ();
+		audioSource = gameObject.GetComponent<AudioSource> ();
 	}
 
 	
@@ -24,6 +28,9 @@ public class GoalScript : MonoBehaviour {
 		if (other.gameObject.tag == "Player" && playerJump.parachuteOpen) {
 			playerJump.Victory = true;
 			_animtor.SetTrigger ("Victory");
+			audioSource.Play ();
+			VictoryPanel.SetActive (true);
+			ScoreText.SetActive (false);
 			Destroy (parachute);
 			float dist = Vector3.Distance(player.transform.position, GoalCenter.transform.position);
 			GM.addScore (10000 - dist * 500);

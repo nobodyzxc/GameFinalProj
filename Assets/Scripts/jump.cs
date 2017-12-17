@@ -10,16 +10,17 @@ public class jump : MonoBehaviour {
 	int paraOpenTime = 0;
 	float charaSpeed;
 	Vector3 chara_pre_Pos;
-	public GameObject parachute;
 	public GameObject parachuteInst;
 	public Vector3 offset;
 	// Use this for initialization
 	Vector3 startPosition;
-	public GameObject test;
 	public GameObject topCam;
 	public GameObject backCam;
 	float gra = 3f; //4.9f;
 	public ConstantForce CF;
+	public GameObject SWAT;
+	[HideInInspector]public bool Victory = false;
+	[HideInInspector]public bool parachuteOpen = false;
 	void switchCam(){
 		bool t = topCam.activeSelf;
 		backCam.SetActive (t);
@@ -101,6 +102,7 @@ public class jump : MonoBehaviour {
 			}
 			else if (state == 3) {
 				switchCam ();
+
 				animtor.SetInteger ("state", 3);
 				paraAnim.SetInteger ("state", 1);
 				rbody.drag = 0.5f;
@@ -109,8 +111,11 @@ public class jump : MonoBehaviour {
 		}
 		if (paraOpenTime > 0 && paraOpenTime < 600) {
 			paraOpenTime += 1;
-			if(rbody.velocity != Vector3.zero)
-				print (rbody.velocity);
+			if (paraOpenTime > 100) {
+				parachuteOpen = true;
+			}
+			//if(rbody.velocity != Vector3.zero)
+				//print (rbody.velocity);
 		}
 		chara_pre_Pos = transform.position;
 	}
@@ -118,11 +123,22 @@ public class jump : MonoBehaviour {
 
 	void OnCollisionEnter(Collision collision){
 		if (collision.gameObject.tag == "Ground") {
-			state += 1;
-			if (paraOpenTime < 50)
+			
+			if (state == 3 && paraOpenTime >= 100) {
+				if (!Victory) {
+					animtor.SetTrigger ("Fail");
+				}
+				SWAT.transform.parent = SWAT.transform.parent.parent;
+				Destroy (parachuteInst);
+			}
+			if (paraOpenTime < 100) {
+				state = 5;
 				animtor.SetInteger ("state", 5);
-			else
+			} else if(!parachuteOpen){
+				state = 6;
 				animtor.SetInteger ("state", 6);
+			}
+				
 			print (paraOpenTime);
 
 		}

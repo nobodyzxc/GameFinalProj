@@ -21,6 +21,12 @@ public class jump : MonoBehaviour {
 	public GameObject SWAT;
 	[HideInInspector]public bool Victory = false;
 	[HideInInspector]public bool parachuteOpen = false;
+	public GameObject BackGroundMusic;
+	public GameObject RetryPanel;
+	public AudioClip[] deathAudio;
+	AudioSource audioSource;
+	AudioClip deathClip;
+
 	void switchCam(){
 		bool t = topCam.activeSelf;
 		backCam.SetActive (t);
@@ -32,6 +38,7 @@ public class jump : MonoBehaviour {
 		//rbody = gameObject.GetComponent<Rigidbody> ();
 		rbody = GetComponent<Rigidbody>();
 		animtor = transform.GetChild(0).gameObject.GetComponent<Animator> ();
+		audioSource = gameObject.GetComponent<AudioSource> ();
 		//Physics.gravity = new Vector3 (0f, -gra, 0f);
 	}
 
@@ -134,13 +141,30 @@ public class jump : MonoBehaviour {
 			if (paraOpenTime < 100) {
 				state = 5;
 				animtor.SetInteger ("state", 5);
+				playerDead ();
 			} else if(!parachuteOpen){
 				state = 6;
 				animtor.SetInteger ("state", 6);
+				playerDead ();
 			}
 				
 			print (paraOpenTime);
 
 		}
+	}
+	void playerDead(){
+		int index = Random.Range (0, deathAudio.Length);
+		deathClip = deathAudio [index];
+		audioSource.clip = deathClip;
+		audioSource.Play ();
+		StartCoroutine (RetryGame ());
+	}
+	IEnumerator RetryGame(){
+		
+		yield return new WaitForSeconds(5.0f);
+		BackGroundMusic.SetActive (false);
+		RetryPanel.SetActive (true);
+
+
 	}
 }

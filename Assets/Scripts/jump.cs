@@ -134,6 +134,7 @@ public class jump : MonoBehaviour {
 			if (state == 3 && paraOpenTime >= 100) {
 				if (!Victory) {
 					animtor.SetTrigger ("Fail");
+					StartCoroutine (RetryGame ());
 				}
 				SWAT.transform.parent = SWAT.transform.parent.parent;
 				Destroy (parachuteInst);

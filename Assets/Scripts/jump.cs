@@ -27,6 +27,8 @@ public class jump : MonoBehaviour {
 	AudioSource audioSource;
 	AudioClip deathClip;
 
+	public GameObject bloods;
+
 	void switchCam(){
 		bool t = topCam.activeSelf;
 		backCam.SetActive (t);
@@ -160,6 +162,7 @@ public class jump : MonoBehaviour {
 		deathClip = deathAudio [index];
 		audioSource.clip = deathClip;
 		audioSource.Play ();
+		bloods.SetActive (true);
 		StartCoroutine (RetryGame ());
 	}
 	IEnumerator RetryGame(){

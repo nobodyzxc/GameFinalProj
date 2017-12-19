@@ -30,6 +30,7 @@ public class jump : MonoBehaviour {
 	public GameObject bloods;
 
 	void switchCam(){
+		return;
 		bool t = topCam.activeSelf;
 		backCam.SetActive (t);
 		topCam.SetActive (!t);
@@ -56,8 +57,10 @@ public class jump : MonoBehaviour {
 			CF.relativeForce = new Vector3 (0f, -gra+2, 0f);
 		//print (Physics.gravity);
 		//print (rbody.velocity);
-		if (state == 2) {
-			int fix = 15;
+		int fix = 15;
+		Vector3 euler = transform.eulerAngles;
+
+		if (state == 2){
 			Vector3 nv =  transform.forward.normalized
 				* (rbody.velocity.x / rbody.velocity.normalized.x)
 				+ new Vector3(0 , -Mathf.Sin((rbody.rotation.eulerAngles.x * Mathf.Deg2Rad)) , 0) * Time.deltaTime * 10;
@@ -65,8 +68,7 @@ public class jump : MonoBehaviour {
 				rbody.velocity = nv;
 			float torque = 0.5f;
 			Quaternion rot = transform.rotation;
-			Vector3 euler = transform.eulerAngles;
-
+		
 			if (Input.GetKey (KeyCode.RightArrow)) {
 				float nextZ = (euler.z >= 360 - fix || euler.z <= fix)? euler.z - 1 : approach(euler.z, 360 - fix, fix) - 1;
 				transform.eulerAngles = new Vector3 (euler.x, euler.y, nextZ);
@@ -99,6 +101,25 @@ public class jump : MonoBehaviour {
 		}
 		if (state == 3) {
 			CF.enabled = false;
+			float nextX;
+			float speed = 10 * Time.deltaTime;
+			if (Input.GetKey (KeyCode.RightArrow)) {
+				transform.position += new Vector3 (-speed, 0, 0);
+			}
+			if (Input.GetKey (KeyCode.LeftArrow)) {
+				transform.position += new Vector3 (speed, 0, 0);
+			}
+
+			if (Input.GetKey (KeyCode.UpArrow)) {
+				nextX = (euler.x >= 360 - fix || euler.x <= fix)? euler.x - 1 : approach(euler.x, 360 - fix, fix) - 1;
+				transform.eulerAngles = new Vector3 (nextX, euler.y, euler.z);
+			}
+			if (Input.GetKey (KeyCode.DownArrow)) {
+				nextX = (euler.x >= 360 - fix || euler.x <= fix)? euler.x  + 1 : approach(euler.x, 360 - fix, fix) + 1;
+				transform.eulerAngles = new Vector3 (nextX, euler.y, euler.z);
+			}
+			// spin , let feet toward land
+			/*
 			if (Input.GetKey (KeyCode.RightArrow)) {
 				transform.Rotate (new Vector3 (0, 0, -1));
 			}
@@ -111,6 +132,7 @@ public class jump : MonoBehaviour {
 			if (Input.GetKey (KeyCode.DownArrow)) {
 				transform.Rotate (new Vector3 (-1, 0, 0));
 			}
+			*/
 		}
 
 
@@ -139,10 +161,12 @@ public class jump : MonoBehaviour {
 				paraOpenTime = 1;
 			} else if (state == 4) {
 				rbody.drag = 0f;
+
 				parachuteInst.transform.parent = parachuteInst.transform.parent.parent.parent.parent;
 				parachuteInst.AddComponent<Rigidbody> ();
 				parachuteInst.GetComponent<Rigidbody> ().velocity = -rbody.velocity;
 				parachuteInst.GetComponent<Rigidbody> ().isKinematic = true;
+
 
 			}
 		}
@@ -160,9 +184,14 @@ public class jump : MonoBehaviour {
 
 	void OnCollisionEnter(Collision collision){
 		if (collision.gameObject.tag == "Ground") {
-			if(SWAT.transform.parent != null)
-				SWAT.transform.parent = SWAT.transform.parent.parent;
-			if (state == 3 && paraOpenTime >= 100) {
+			rbody.velocity = Vector3.zero;
+			rbody.freezeRotation = true;
+			if (SWAT.transform.parent != null) {
+				transform.GetChild (1).parent = transform.GetChild (0);
+				//SWAT.transform.parent = SWAT.transform.parent.parent;
+				state = 8 + 9;
+			}
+			if (state != 2 && paraOpenTime >= 100) {
 				if (!Victory) {
 					animtor.SetTrigger ("Fail");
 					StartCoroutine (RetryGame ());

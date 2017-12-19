@@ -188,7 +188,7 @@ public class jump : MonoBehaviour {
 			rbody.freezeRotation = true;
 			if (SWAT.transform.parent != null) {
 				transform.GetChild (1).parent = transform.GetChild (0);
-				//SWAT.transform.parent = SWAT.transform.parent.parent;
+				SWAT.transform.parent = SWAT.transform.parent.parent;
 				state = 8 + 9;
 			}
 			if (state != 2 && paraOpenTime >= 100) {

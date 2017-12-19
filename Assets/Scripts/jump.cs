@@ -111,12 +111,15 @@ public class jump : MonoBehaviour {
 			}
 
 			if (Input.GetKey (KeyCode.UpArrow)) {
-				nextX = (euler.x >= 360 - fix || euler.x <= fix)? euler.x - 1 : approach(euler.x, 360 - fix, fix) - 1;
+				nextX = (euler.x >= 360 - fix || euler.x <= fix)? euler.x + 1 : approach(euler.x, 360 - fix, fix) + 1;
 				transform.eulerAngles = new Vector3 (nextX, euler.y, euler.z);
+				rbody.velocity += new Vector3 (0, -speed, 0);
 			}
 			if (Input.GetKey (KeyCode.DownArrow)) {
-				nextX = (euler.x >= 360 - fix || euler.x <= fix)? euler.x  + 1 : approach(euler.x, 360 - fix, fix) + 1;
+				nextX = (euler.x >= 360 - fix || euler.x <= fix)? euler.x  - 1 : approach(euler.x, 360 - fix, fix) - 1;
 				transform.eulerAngles = new Vector3 (nextX, euler.y, euler.z);
+				if (rbody.velocity.y < -10f)
+					rbody.velocity += new Vector3 (0, speed, 0);
 			}
 			// spin , let feet toward land
 			/*
@@ -188,7 +191,7 @@ public class jump : MonoBehaviour {
 			rbody.freezeRotation = true;
 			if (SWAT.transform.parent != null) {
 				transform.GetChild (1).parent = transform.GetChild (0);
-				//SWAT.transform.parent = SWAT.transform.parent.parent;
+				SWAT.transform.parent = SWAT.transform.parent.parent;
 				state = 8 + 9;
 			}
 			if (state != 2 && paraOpenTime >= 100) {

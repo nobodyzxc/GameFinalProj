@@ -87,7 +87,7 @@ public class jump : MonoBehaviour {
 			}*/
 			print (transform.rotation);
 
-			if (Input.GetKey (KeyCode.LeftControl)) {
+			if (Input.GetKey (KeyCode.Z)) {
 				transform.Rotate (new Vector3 (-1, 0, 0));
 			} else {
 				Vector3 eu = transform.eulerAngles;
@@ -184,11 +184,12 @@ public class jump : MonoBehaviour {
 
 	void OnCollisionEnter(Collision collision){
 		if (collision.gameObject.tag == "Ground") {
-			rbody.velocity = Vector3.zero;
+			//rbody.velocity = Vector3.zero;
 			rbody.freezeRotation = true;
 			if (SWAT.transform.parent != null) {
 				transform.GetChild (1).parent = transform.GetChild (0);
 				SWAT.transform.parent = SWAT.transform.parent.parent;
+
 				state = 8 + 9;
 			}
 			if (state != 2 && paraOpenTime >= 100) {

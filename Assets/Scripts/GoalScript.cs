@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GoalScript : MonoBehaviour {
 	public Animator _animtor;
-	public GameObject player;
+	public GameObject SWAT;
 	public jump playerJump;
 	public GameObject GoalCenter;
 	public GameObject parachute;
@@ -32,7 +32,7 @@ public class GoalScript : MonoBehaviour {
 			VictoryPanel.SetActive (true);
 			ScoreText.SetActive (false);
 			Destroy (parachute);
-			float dist = Vector3.Distance(player.transform.position, GoalCenter.transform.position);
+			float dist = Vector3.Distance(SWAT.transform.position, GoalCenter.transform.position);
 			GM.addScore (10000 - dist * 200);
 		}
 	}

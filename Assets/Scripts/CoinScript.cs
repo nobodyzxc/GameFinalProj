@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CoinScript : MonoBehaviour {
 	GameManager GM;
+	public float CoinScore = 1000f;
 	// Use this for initialization
 	void Start () {
 		GM = GameObject.Find ("GameManager").GetComponent<GameManager> ();
@@ -15,7 +16,7 @@ public class CoinScript : MonoBehaviour {
 	}
 	void OnTriggerEnter(Collider other){
 		if (other.gameObject.tag == "Player") {
-			GM.addScore (1000);
+			GM.addScore (CoinScore);
 			Destroy (this.gameObject);
 		}
 	}

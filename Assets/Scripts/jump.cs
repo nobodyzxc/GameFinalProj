@@ -66,16 +66,16 @@ public class jump : MonoBehaviour {
 				+ new Vector3(0 , -Mathf.Sin((rbody.rotation.eulerAngles.x * Mathf.Deg2Rad)) , 0) * Time.deltaTime * 10;
 			if (!float.IsNaN (nv.x))
 				rbody.velocity = nv;
-			float torque = 0.5f;
+			float torque = 0.25f;
 			Quaternion rot = transform.rotation;
 		
 			if (Input.GetKey (KeyCode.RightArrow)) {
-				float nextZ = (euler.z >= 360 - fix || euler.z <= fix)? euler.z - 1 : approach(euler.z, 360 - fix, fix) - 1;
+				float nextZ = (euler.z >= 360 - fix || euler.z <= fix)? euler.z - 0.5f : approach(euler.z, 360 - fix, fix) - 0.5f;
 				transform.eulerAngles = new Vector3 (euler.x, euler.y, nextZ);
 				rbody.AddTorque (0, torque, 0);
 			}
 			if (Input.GetKey (KeyCode.LeftArrow)) {
-				float nextZ = (euler.z >= 360 - fix || euler.z <= fix)? euler.z  + 1 : approach(euler.z, 360 - fix, fix) + 1;
+				float nextZ = (euler.z >= 360 - fix || euler.z <= fix)? euler.z  + 0.5f : approach(euler.z, 360 - fix, fix) + 0.5f;
 				transform.eulerAngles = new Vector3 (euler.x, euler.y, nextZ);
 				rbody.AddTorque (0, -torque, 0);
 			}
@@ -161,6 +161,7 @@ public class jump : MonoBehaviour {
 				paraOpenTime = 1;
 			} else if (state == 4) {
 				rbody.drag = 0f;
+				animtor.SetTrigger ("dropParachute");
 
 				parachuteInst.transform.parent = parachuteInst.transform.parent.parent.parent.parent;
 				parachuteInst.AddComponent<Rigidbody> ();
@@ -170,7 +171,7 @@ public class jump : MonoBehaviour {
 
 			}
 		}
-		if (paraOpenTime > 0 && paraOpenTime < 600) {
+		if (paraOpenTime > 0 && paraOpenTime < 600 && state == 3) {
 			paraOpenTime += 1;
 			if (paraOpenTime > 100) {
 				parachuteOpen = true;

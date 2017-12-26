@@ -17,6 +17,9 @@ public class LoadLevelButtonScript : MonoBehaviour {
 	public void LoadGameLevel02(){
 		StartCoroutine (DisplayLoadingScreen("Level02"));
 	}
+	public void LoadGameLevel03(){
+		StartCoroutine (DisplayLoadingScreen("Level03"));
+	}
 	IEnumerator DisplayLoadingScreen (string sceneName){////(1)
 		loadindBackGround.SetActive(true);
 		AsyncOperation async = Application.LoadLevelAsync (sceneName);////(2)

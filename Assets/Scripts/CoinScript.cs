@@ -8,8 +8,7 @@ public class CoinScript : MonoBehaviour {
 	AudioSource audioSource;
 	// Use this for initialization
 	void Start () {
-		GM = GameObject.Find ("GameManager").GetComponent<GameManager> ();
-		audioSource = gameObject.GetComponent<AudioSource> ();
+
 	}
 	
 	// Update is called once per frame
@@ -18,6 +17,9 @@ public class CoinScript : MonoBehaviour {
 	}
 	void OnTriggerEnter(Collider other){
 		if (other.gameObject.tag == "Player") {
+			GM = GameObject.Find ("GameManager").GetComponent<GameManager> ();
+			audioSource = GetComponent<AudioSource> ();
+			print ("fuck this ball");
 			audioSource.Play ();
 			GM.addScore (CoinScore);
 			Destroy (this.gameObject);

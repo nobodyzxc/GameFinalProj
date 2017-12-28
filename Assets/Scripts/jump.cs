@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+
+
 
 public class jump : MonoBehaviour {
 	Animator animtor;
@@ -26,6 +29,7 @@ public class jump : MonoBehaviour {
 	public AudioClip[] deathAudio;
 	AudioSource audioSource;
 	AudioClip deathClip;
+	public GameObject coin;
 
 	public GameObject bloods;
 
@@ -36,23 +40,62 @@ public class jump : MonoBehaviour {
 		topCam.SetActive (!t);
 	}
 
-	void Start () {
-
-		//rbody = gameObject.GetComponent<Rigidbody> ();
-		rbody = GetComponent<Rigidbody>();
-		animtor = transform.GetChild(0).gameObject.GetComponent<Animator> ();
-		audioSource = gameObject.GetComponent<AudioSource> ();
-		//Physics.gravity = new Vector3 (0f, -gra, 0f);
-	}
-
 	float approach(float v , int a , int b){
 		if (Mathf.Abs (v - a) > Mathf.Abs (v - b))
 			return b;
 		return a;
 	}
 
+	StreamWriter writer;
+	bool fileOpen = false;
+	int gap = 0;
+	bool SETROUTE = false;
+	void Start () {
+
+		//rbody = gameObject.GetComponent<Rigidbody> ();
+		rbody = GetComponent<Rigidbody>();
+		animtor = transform.GetChild(0).gameObject.GetComponent<Animator> ();
+		audioSource = gameObject.GetComponent<AudioSource> ();
+
+
+		//Physics.gravity = new Vector3 (0f, -gra, 0f);
+		string path = "Assets/route3.txt";
+		//Write some text to the test.txt file
+
+		if (SETROUTE) {
+			writer = new StreamWriter (path, true);
+			fileOpen = true;
+		} else {
+			StreamReader reader = new StreamReader (path);
+			while (true) {
+				var str = reader.ReadLine ();
+				if (str == null)
+					break;
+				var parts = str.Split (' ');
+				Instantiate (coin, new Vector3 (float.Parse (parts [0]), float.Parse (parts [1]), float.Parse (parts [2])), transform.rotation);
+			}
+		}
+	}
+
+
 	// Update is called once per frame
 	void Update () {
+
+		if (state == 2 && SETROUTE) {
+			if (gap == 0) {
+				gap = 10;
+				writer.WriteLine (transform.position.x + " " + transform.position.y + " " + transform.position.z);
+				print ("write file");
+			}
+			gap--;
+		}
+		if (state == 5 && fileOpen && SETROUTE) {
+			fileOpen = false;
+			writer.Close();
+			print ("close file");
+		}
+
+
 		if(state >= 1 && state < 3)
 			CF.relativeForce = new Vector3 (0f, -gra+2, 0f);
 		//print (Physics.gravity);
@@ -79,13 +122,14 @@ public class jump : MonoBehaviour {
 				transform.eulerAngles = new Vector3 (euler.x, euler.y, nextZ);
 				rbody.AddTorque (0, -torque, 0);
 			}
+			if(Input.GetKey(KeyCode.Alpha1))
+				writer.Close();
 			/*if (Input.GetKey (KeyCode.UpArrow)){
 				transform.Rotate (new Vector3 (1, 0, 0));
 			}
 			if (Input.GetKey (KeyCode.DownArrow)) {
 				transform.Rotate (new Vector3 (-1, 0, 0));
 			}*/
-			print (transform.rotation);
 
 			if (Input.GetKey (KeyCode.Z)) {
 				transform.Rotate (new Vector3 (-1, 0, 0));
@@ -213,7 +257,6 @@ public class jump : MonoBehaviour {
 				playerDead ();
 			}
 
-			print (paraOpenTime);
 
 		}
 	}

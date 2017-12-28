@@ -70,12 +70,12 @@ public class jump : MonoBehaviour {
 			Quaternion rot = transform.rotation;
 		
 			if (Input.GetKey (KeyCode.RightArrow)) {
-				float nextZ = (euler.z >= 360 - fix || euler.z <= fix)? euler.z - 0.5f : approach(euler.z, 360 - fix, fix) - 0.5f;
+				float nextZ = (euler.z >= 360 - fix || euler.z <= 180)? euler.z - 0.5f : euler.z;
 				transform.eulerAngles = new Vector3 (euler.x, euler.y, nextZ);
 				rbody.AddTorque (0, torque, 0);
 			}
 			if (Input.GetKey (KeyCode.LeftArrow)) {
-				float nextZ = (euler.z >= 360 - fix || euler.z <= fix)? euler.z  + 0.5f : approach(euler.z, 360 - fix, fix) + 0.5f;
+				float nextZ = (euler.z >= 180 || euler.z <= fix)? euler.z  + 0.5f : euler.z;
 				transform.eulerAngles = new Vector3 (euler.x, euler.y, nextZ);
 				rbody.AddTorque (0, -torque, 0);
 			}

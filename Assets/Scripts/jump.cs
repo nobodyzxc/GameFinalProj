@@ -66,7 +66,8 @@ public class jump : MonoBehaviour {
 		if (SETROUTE) {
 			writer = new StreamWriter (path, true);
 			fileOpen = true;
-		} else {
+		} else if(false){
+			int counter = 0;
 			StreamReader reader = new StreamReader (path);
 			while (true) {
 				var str = reader.ReadLine ();
@@ -75,7 +76,12 @@ public class jump : MonoBehaviour {
 				var parts = str.Split (' ');
 				Vector3 pos = new Vector3 (float.Parse(parts[0]), float.Parse(parts[1]), float.Parse(parts[2]));
 				Quaternion rot = Quaternion.Euler(float.Parse(parts[3]), float.Parse(parts[4]), float.Parse(parts[5]));
-				Instantiate (ring, pos , rot);
+				if(counter == 10)
+					Instantiate (ring, pos , rot);
+				else
+					Instantiate (coin, pos , rot);
+				counter++;
+				counter %= 90;
 			}
 		}
 	}
@@ -86,7 +92,7 @@ public class jump : MonoBehaviour {
 
 		if (state == 2 && SETROUTE) {
 			if (gap == 0) {
-				gap = 10;
+				gap = 3;
 				writer.WriteLine (transform.position.x + " " + transform.position.y + " " + transform.position.z
 					+ " " + transform.rotation.x + " " + transform.rotation.y + " " + transform.rotation.z);
 				print ("write file");
@@ -220,7 +226,7 @@ public class jump : MonoBehaviour {
 			}
 		}
 		if (paraOpenTime > 0 && paraOpenTime < 600 && state == 3) {
-			paraOpenTime += 1;
+			paraOpenTime += 1 ;
 			if (paraOpenTime > 100) {
 				parachuteOpen = true;
 			}
@@ -251,11 +257,14 @@ public class jump : MonoBehaviour {
 
 				//Destroy (parachuteInst);
 			}
+
 			if (paraOpenTime < 100) {
+				print (paraOpenTime+" not enough");
 				state = 5;
 				animtor.SetInteger ("state", 5);
 				playerDead ();
 			} else if(!parachuteOpen){
+				print (paraOpenTime+" not open");
 				state = 6;
 				animtor.SetInteger ("state", 6);
 				playerDead ();

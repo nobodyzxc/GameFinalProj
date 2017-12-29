@@ -25,15 +25,20 @@ public class GoalScript : MonoBehaviour {
 		
 	}
 	void OnTriggerEnter(Collider other){
-		if (other.gameObject.tag == "Player" && playerJump.parachuteOpen) {
-			playerJump.Victory = true;
-			_animtor.SetTrigger ("Victory");
-			audioSource.Play ();
-			VictoryPanel.SetActive (true);
-			ScoreText.SetActive (false);
-			Destroy (parachute);
-			float dist = Vector3.Distance(SWAT.transform.position, GoalCenter.transform.position);
-			GM.addScore (10000 - dist * 200);
+		if (other.gameObject.tag == "Player") {
+			if (playerJump.parachuteOpen) {
+				playerJump.Victory = true;
+				_animtor.SetTrigger ("Victory");
+				audioSource.Play ();
+				VictoryPanel.SetActive (true);
+				ScoreText.SetActive (false);
+				Destroy (parachute);
+				float dist = Vector3.Distance(SWAT.transform.position, GoalCenter.transform.position);
+				GM.addScore (10000 - dist * 200);
+			}
+
+			Destroy (this.gameObject);
+
 		}
 	}
 }

@@ -19,9 +19,10 @@ public class CoinScript : MonoBehaviour {
 		if (other.gameObject.tag == "Player") {
 			GM = GameObject.Find ("GameManager").GetComponent<GameManager> ();
 			audioSource = GetComponent<AudioSource> ();
-			print ("fuck this ball");
-			audioSource.Play ();
-			GM.addScore (CoinScore);
+			if(audioSource)
+				audioSource.Play ();
+			if(GM)
+				GM.addScore (CoinScore);
 			Destroy (this.gameObject);
 		}
 	}

@@ -30,6 +30,7 @@ public class jump : MonoBehaviour {
 	AudioSource audioSource;
 	AudioClip deathClip;
 	public GameObject coin;
+	public GameObject ring;
 
 	public GameObject bloods;
 
@@ -59,7 +60,7 @@ public class jump : MonoBehaviour {
 
 
 		//Physics.gravity = new Vector3 (0f, -gra, 0f);
-		string path = "Assets/route3.txt";
+		string path = "Assets/routes/route3.txt";
 		//Write some text to the test.txt file
 
 		if (SETROUTE) {
@@ -72,7 +73,9 @@ public class jump : MonoBehaviour {
 				if (str == null)
 					break;
 				var parts = str.Split (' ');
-				Instantiate (coin, new Vector3 (float.Parse (parts [0]), float.Parse (parts [1]), float.Parse (parts [2])), transform.rotation);
+				Vector3 pos = new Vector3 (float.Parse(parts[0]), float.Parse(parts[1]), float.Parse(parts[2]));
+				Quaternion rot = Quaternion.Euler(float.Parse(parts[3]), float.Parse(parts[4]), float.Parse(parts[5]));
+				Instantiate (ring, pos , rot);
 			}
 		}
 	}
@@ -84,7 +87,8 @@ public class jump : MonoBehaviour {
 		if (state == 2 && SETROUTE) {
 			if (gap == 0) {
 				gap = 10;
-				writer.WriteLine (transform.position.x + " " + transform.position.y + " " + transform.position.z);
+				writer.WriteLine (transform.position.x + " " + transform.position.y + " " + transform.position.z
+					+ " " + transform.rotation.x + " " + transform.rotation.y + " " + transform.rotation.z);
 				print ("write file");
 			}
 			gap--;

@@ -66,7 +66,7 @@ public class jump : MonoBehaviour {
 		if (SETROUTE) {
 			writer = new StreamWriter (path, true);
 			fileOpen = true;
-		} else if(false){
+		} else {
 			int counter = 0;
 			StreamReader reader = new StreamReader (path);
 			while (true) {

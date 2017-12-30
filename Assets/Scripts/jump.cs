@@ -51,8 +51,9 @@ public class jump : MonoBehaviour {
 	bool fileOpen = false;
 	int gap = 0;
 	bool SETROUTE = false;
+	bool SHOWBALL = false;
 	void Start () {
-
+		
 		//rbody = gameObject.GetComponent<Rigidbody> ();
 		rbody = GetComponent<Rigidbody>();
 		animtor = transform.GetChild(0).gameObject.GetComponent<Animator> ();
@@ -66,7 +67,7 @@ public class jump : MonoBehaviour {
 		if (SETROUTE) {
 			writer = new StreamWriter (path, true);
 			fileOpen = true;
-		} else if(true){
+		} else if(SHOWBALL){
 			int counter = 0;
 			StreamReader reader = new StreamReader (path);
 			while (true) {

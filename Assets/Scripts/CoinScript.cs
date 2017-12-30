@@ -10,7 +10,8 @@ public class CoinScript : MonoBehaviour {
 	Transform player;
 	// Use this for initialization
 	void Start () {
-		
+		audioSource = GetComponent<AudioSource> ();
+		GM = GameObject.Find ("GameManager").GetComponent<GameManager> ();
 		player = GameObject.FindGameObjectWithTag ("Player").transform;
 	}
 	
@@ -21,10 +22,9 @@ public class CoinScript : MonoBehaviour {
 	}
 	void OnTriggerEnter(Collider other){
 		if (other.gameObject.tag == "Player") {
-			GM = GameObject.Find ("GameManager").GetComponent<GameManager> ();
-			audioSource = GetComponent<AudioSource> ();
 			if(audioSource)
 				audioSource.Play ();
+
 			if(GM)
 				GM.addScore (CoinScore);
 			Destroy (this.gameObject);

@@ -8,7 +8,7 @@ public class GoalScript : MonoBehaviour {
 	public jump playerJump;
 	public GameObject GoalCenter;
 	public GameObject parachute;
-	AudioSource audioSource;
+
 	public GameObject VictoryPanel;
 	public GameObject ScoreText;
 	GameManager GM;
@@ -16,7 +16,7 @@ public class GoalScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		GM = GameObject.Find ("GameManager").GetComponent<GameManager> ();
-		audioSource = gameObject.GetComponent<AudioSource> ();
+
 	}
 
 	
@@ -29,7 +29,6 @@ public class GoalScript : MonoBehaviour {
 			if (playerJump.parachuteOpen) {
 				playerJump.Victory = true;
 				_animtor.SetTrigger ("Victory");
-				audioSource.Play ();
 				VictoryPanel.SetActive (true);
 				ScoreText.SetActive (false);
 				Destroy (parachute);

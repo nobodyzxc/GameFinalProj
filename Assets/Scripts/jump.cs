@@ -66,7 +66,7 @@ public class jump : MonoBehaviour {
 		if (SETROUTE) {
 			writer = new StreamWriter (path, true);
 			fileOpen = true;
-		} else if(false){
+		} else if(true){
 			int counter = 0;
 			StreamReader reader = new StreamReader (path);
 			while (true) {
@@ -227,7 +227,7 @@ public class jump : MonoBehaviour {
 		}
 		if (paraOpenTime > 0 && paraOpenTime < 600 && state == 3) {
 			paraOpenTime += 1 ;
-			if (paraOpenTime > 100) {
+			if (paraOpenTime > 60) {
 				parachuteOpen = true;
 			}
 			//if(rbody.velocity != Vector3.zero)
@@ -258,7 +258,7 @@ public class jump : MonoBehaviour {
 				//Destroy (parachuteInst);
 			}
 
-			if (paraOpenTime < 100) {
+			if (paraOpenTime < 60) { /* mod here */
 				print (paraOpenTime+" not enough");
 				state = 5;
 				animtor.SetInteger ("state", 5);

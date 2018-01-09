@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class GoalScript : MonoBehaviour {
 	public Animator _animtor;
-	public GameObject player;
+	public GameObject SWAT;
 	public jump playerJump;
 	public GameObject GoalCenter;
 	public GameObject parachute;
-	AudioSource audioSource;
+
 	public GameObject VictoryPanel;
 	public GameObject ScoreText;
 	GameManager GM;
@@ -16,7 +16,7 @@ public class GoalScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		GM = GameObject.Find ("GameManager").GetComponent<GameManager> ();
-		audioSource = gameObject.GetComponent<AudioSource> ();
+
 	}
 
 	
@@ -25,15 +25,19 @@ public class GoalScript : MonoBehaviour {
 		
 	}
 	void OnTriggerEnter(Collider other){
-		if (other.gameObject.tag == "Player" && playerJump.parachuteOpen) {
-			playerJump.Victory = true;
-			_animtor.SetTrigger ("Victory");
-			audioSource.Play ();
-			VictoryPanel.SetActive (true);
-			ScoreText.SetActive (false);
-			Destroy (parachute);
-			float dist = Vector3.Distance(player.transform.position, GoalCenter.transform.position);
-			GM.addScore (10000 - dist * 200);
+		if (other.gameObject.tag == "Player") {
+			if (playerJump.parachuteOpen) {
+				playerJump.Victory = true;
+				_animtor.SetTrigger ("Victory");
+				VictoryPanel.SetActive (true);
+				ScoreText.SetActive (false);
+				Destroy (parachute);
+				float dist = Vector3.Distance(SWAT.transform.position, GoalCenter.transform.position);
+				GM.addScore (10000 - dist * 200);
+			}
+
+			Destroy (this.gameObject);
+
 		}
 	}
 }

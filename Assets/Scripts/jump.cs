@@ -10,7 +10,7 @@ public class jump : MonoBehaviour {
 	public Animator paraAnim;
 	Rigidbody rbody;
 	public int state = 0;
-	int paraOpenTime = 0;
+	float paraOpenTime = 0;
 	float charaSpeed;
 	Vector3 chara_pre_Pos;
 	public GameObject parachuteInst;
@@ -31,8 +31,9 @@ public class jump : MonoBehaviour {
 	AudioClip deathClip;
 	public GameObject coin;
 	public GameObject ring;
-
+	float escapeTime = 0f;
 	public GameObject bloods;
+	const float deadTime = 3f;
 
 	void switchCam(){
 		return;
@@ -217,7 +218,7 @@ public class jump : MonoBehaviour {
 			} else if (state == 4) {
 				rbody.drag = 0f;
 				animtor.SetTrigger ("dropParachute");
-
+				escapeTime += Time.deltaTime;
 				parachuteInst.transform.parent = parachuteInst.transform.parent.parent.parent.parent;
 				parachuteInst.AddComponent<Rigidbody> ();
 				parachuteInst.GetComponent<Rigidbody> ().velocity = -rbody.velocity;
@@ -227,8 +228,9 @@ public class jump : MonoBehaviour {
 			}
 		}
 		if (paraOpenTime > 0 && paraOpenTime < 600 && state == 3) {
-			paraOpenTime += 1 ;
-			if (paraOpenTime > 60) {
+			paraOpenTime += Time.deltaTime ;
+			print (paraOpenTime);
+			if (paraOpenTime > deadTime) {
 				parachuteOpen = true;
 			}
 			//if(rbody.velocity != Vector3.zero)
@@ -248,7 +250,7 @@ public class jump : MonoBehaviour {
 
 				state = 8 + 9;
 			}
-			if (state != 2 && paraOpenTime >= 100) {
+			if (state != 2 && paraOpenTime >= deadTime) {
 				if (!Victory) {
 					animtor.SetTrigger ("Fail");
 					StartCoroutine (RetryGame ());
@@ -259,12 +261,12 @@ public class jump : MonoBehaviour {
 				//Destroy (parachuteInst);
 			}
 
-			if (paraOpenTime < 60) { /* mod here */
+			if (paraOpenTime < deadTime) { /* mod here */
 				print (paraOpenTime+" not enough");
 				state = 5;
 				animtor.SetInteger ("state", 5);
 				playerDead ();
-			} else if(!parachuteOpen){
+			} else if(!parachuteOpen || escapeTime > deadTime){
 				print (paraOpenTime+" not open");
 				state = 6;
 				animtor.SetInteger ("state", 6);

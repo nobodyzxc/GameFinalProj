@@ -34,6 +34,7 @@ public class jump : MonoBehaviour {
 	float escapeTime = 0f;
 	public GameObject bloods;
 	const float deadTime = 3f;
+	public JetFireControlScript JFCS;
 
 	void switchCam(){
 		return;
@@ -143,7 +144,7 @@ public class jump : MonoBehaviour {
 				transform.Rotate (new Vector3 (-1, 0, 0));
 			}*/
 
-			if (Input.GetKey (KeyCode.Z)) {
+			if (Input.GetKey (KeyCode.Z) ) {
 				transform.Rotate (new Vector3 (-1, 0, 0));
 			} else {
 				Vector3 eu = transform.eulerAngles;

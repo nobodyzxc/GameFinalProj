@@ -19,10 +19,13 @@ public class JetFireControlScript : MonoBehaviour {
 		if (Input.GetKey(KeyCode.Z)) {
 			if (fuelTank <= 0) {
 				fuelTank = 0;
-			}
-				fuelTank -= 10*Time.deltaTime;
+				Leftfire.Stop ();
+				Rightfire.Stop ();
+			} else if(fuelTank > 0){
+				fuelTank -= 10 * Time.deltaTime;
 				Leftfire.Play ();
 				Rightfire.Play ();
+			}
 		}
 		if (Input.GetKeyUp(KeyCode.Z)) {
 			Leftfire.Stop ();

@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: dbcf16a055cb34e67b2ee959bdaaf161
+timeCreated: 1515817260
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Fire on the Mountain
+  fontNames:
+  - Fire on the Mountain
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

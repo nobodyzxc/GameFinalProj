@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: be9b4337cf4ea48d1a55bb9a6207f7d4
+timeCreated: 1515817206
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Midnight Bangkok
+  fontNames:
+  - Midnight Bangkok
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

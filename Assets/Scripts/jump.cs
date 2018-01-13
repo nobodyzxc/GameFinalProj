@@ -144,7 +144,7 @@ public class jump : MonoBehaviour {
 				transform.Rotate (new Vector3 (-1, 0, 0));
 			}*/
 
-			if (Input.GetKey (KeyCode.Z) ) {
+			if (Input.GetKey (KeyCode.Z) && JFCS.fuelTank > 0) {
 				transform.Rotate (new Vector3 (-1, 0, 0));
 			} else {
 				Vector3 eu = transform.eulerAngles;

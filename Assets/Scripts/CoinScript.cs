@@ -8,6 +8,8 @@ public class CoinScript : MonoBehaviour {
 	NavMeshAgent nav;
 	AudioSource audioSource;
 	Transform player;
+	Vector3 lookPos;
+	Quaternion lastPos;
 	// Use this for initialization
 	void Start () {
 		audioSource = GetComponent<AudioSource> ();
@@ -17,8 +19,14 @@ public class CoinScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(gameObject.tag == "Ring")
-			transform.LookAt (player);
+		if (gameObject.tag == "Ring") {
+			//transform.LookAt (player);
+			lookPos = player.position - transform.position;
+			lookPos.y = 0;
+			lastPos = Quaternion.LookRotation(lookPos);
+			transform.rotation = Quaternion.Slerp(transform.rotation,lastPos, Time.deltaTime * 100);
+		}
+			
 	}
 	void OnTriggerEnter(Collider other){
 		if (other.gameObject.tag == "Player") {

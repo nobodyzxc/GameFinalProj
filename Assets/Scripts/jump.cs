@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
 
 
 
@@ -29,19 +28,12 @@ public class jump : MonoBehaviour {
 	public AudioClip[] deathAudio;
 	AudioSource audioSource;
 	AudioClip deathClip;
-	public GameObject coin;
-	public GameObject ring;
+
 	float escapeTime = 0f;
 	public GameObject bloods;
 	const float deadTime = 3f;
 	public JetFireControlScript JFCS;
 
-	void switchCam(){
-		return;
-		bool t = topCam.activeSelf;
-		backCam.SetActive (t);
-		topCam.SetActive (!t);
-	}
 
 	float approach(float v , int a , int b){
 		if (Mathf.Abs (v - a) > Mathf.Abs (v - b))
@@ -49,11 +41,7 @@ public class jump : MonoBehaviour {
 		return a;
 	}
 
-	StreamWriter writer;
-	bool fileOpen = false;
-	int gap = 0;
-	bool SETROUTE = false;
-	bool SHOWBALL = false;
+
 	void Start () {
 		
 		//rbody = gameObject.GetComponent<Rigidbody> ();
@@ -61,58 +49,18 @@ public class jump : MonoBehaviour {
 		animtor = transform.GetChild(0).gameObject.GetComponent<Animator> ();
 		audioSource = gameObject.GetComponent<AudioSource> ();
 
-
-		//Physics.gravity = new Vector3 (0f, -gra, 0f);
-		string path = "Assets/routes/route3.txt";
-		//Write some text to the test.txt file
-
-		if (SETROUTE) {
-			writer = new StreamWriter (path, true);
-			fileOpen = true;
-		} else if(SHOWBALL){
-			int counter = 0;
-			StreamReader reader = new StreamReader (path);
-			while (true) {
-				var str = reader.ReadLine ();
-				if (str == null)
-					break;
-				var parts = str.Split (' ');
-				Vector3 pos = new Vector3 (float.Parse(parts[0]), float.Parse(parts[1]), float.Parse(parts[2]));
-				Quaternion rot = Quaternion.Euler(float.Parse(parts[3]), float.Parse(parts[4]), float.Parse(parts[5]));
-				if(counter == 10)
-					Instantiate (ring, pos , rot);
-				else
-					Instantiate (coin, pos , rot);
-				counter++;
-				counter %= 90;
-			}
-		}
 	}
 
 
 	// Update is called once per frame
 	void Update () {
 
-		if (state == 2 && SETROUTE) {
-			if (gap == 0) {
-				gap = 3;
-				writer.WriteLine (transform.position.x + " " + transform.position.y + " " + transform.position.z
-					+ " " + transform.rotation.x + " " + transform.rotation.y + " " + transform.rotation.z);
-				print ("write file");
-			}
-			gap--;
-		}
-		if (state == 5 && fileOpen && SETROUTE) {
-			fileOpen = false;
-			writer.Close();
-			print ("close file");
-		}
+
 
 
 		if(state >= 1 && state < 3)
 			CF.relativeForce = new Vector3 (0f, -gra+2, 0f);
-		//print (Physics.gravity);
-		//print (rbody.velocity);
+
 		int fix = 15;
 		Vector3 euler = transform.eulerAngles;
 
@@ -135,25 +83,13 @@ public class jump : MonoBehaviour {
 				transform.eulerAngles = new Vector3 (euler.x, euler.y, nextZ);
 				rbody.AddTorque (0, -torque, 0);
 			}
-			if(Input.GetKey(KeyCode.Alpha1))
-				writer.Close();
-			/*if (Input.GetKey (KeyCode.UpArrow)){
-				transform.Rotate (new Vector3 (1, 0, 0));
-			}
-			if (Input.GetKey (KeyCode.DownArrow)) {
-				transform.Rotate (new Vector3 (-1, 0, 0));
-			}*/
+
 
 			if (Input.GetKey (KeyCode.Z) && JFCS.fuelTank > 0) {
 				transform.Rotate (new Vector3 (-1, 0, 0));
 			} else {
 				Vector3 eu = transform.eulerAngles;
 				transform.eulerAngles = new Vector3 (eu.x + 1, eu.y, eu.z);
-
-					
-				/*if (transform.rotation.eulerAngles.x >= 180)
-					transform.Rotate (new Vector3 (-1, 0, 0)); 
-				*/
 			}
 		}
 		if (state == 3) {
@@ -175,26 +111,16 @@ public class jump : MonoBehaviour {
 				nextX = (euler.x >= 360 - fix || euler.x <= fix)? euler.x  + 1 : approach(euler.x, 360 - fix, fix) + 1;
 				transform.eulerAngles = new Vector3 (nextX, euler.y, euler.z);
 			}
-			// spin , let feet toward land
-			/*
-			if (Input.GetKey (KeyCode.RightArrow)) {
-				transform.Rotate (new Vector3 (0, 0, -1));
-			}
-			if (Input.GetKey (KeyCode.LeftArrow)) {
-				transform.Rotate (new Vector3 (0, 0, 1));
-			}
-			if (Input.GetKey (KeyCode.UpArrow)) {
-				transform.Rotate (new Vector3 (1, 0, 0));
-			}
-			if (Input.GetKey (KeyCode.DownArrow)) {
-				transform.Rotate (new Vector3 (-1, 0, 0));
-			}
-			*/
+
 		}
 
+		if (state == 1 && Input.GetKeyDown (KeyCode.Z)) {
+			state = 2;
+			animtor.SetInteger ("state", 2);
+		}
 
 		if (Input.GetKeyDown (KeyCode.Space)) {
-			state += 1;
+			if(state != 1) state += 1;
 			if (state == 1) {
 				rbody.useGravity = true;
 				animtor.SetInteger ("state", 1);
@@ -202,15 +128,7 @@ public class jump : MonoBehaviour {
 				rbody.useGravity = true;
 				rbody.velocity = (transform.position - chara_pre_Pos) / Time.deltaTime;
 
-			} else if (state == 2) {
-				switchCam ();
-				animtor.SetInteger ("state", 2);
-
-				//rbody.velocity += transform.forward * 80;
-
-
 			} else if (state == 3) {
-				switchCam ();
 
 				animtor.SetInteger ("state", 3);
 				paraAnim.SetInteger ("state", 1);
@@ -224,7 +142,6 @@ public class jump : MonoBehaviour {
 				parachuteInst.AddComponent<Rigidbody> ();
 				parachuteInst.GetComponent<Rigidbody> ().velocity = -rbody.velocity;
 				parachuteInst.GetComponent<Rigidbody> ().isKinematic = true;
-
 
 			}
 		}
@@ -273,8 +190,6 @@ public class jump : MonoBehaviour {
 				animtor.SetInteger ("state", 6);
 				playerDead ();
 			}
-
-
 		}
 	}
 	void playerDead(){
@@ -286,11 +201,8 @@ public class jump : MonoBehaviour {
 		StartCoroutine (RetryGame ());
 	}
 	IEnumerator RetryGame(){
-
 		yield return new WaitForSeconds(5.0f);
 		BackGroundMusic.SetActive (false);
 		RetryPanel.SetActive (true);
-
-
 	}
 }

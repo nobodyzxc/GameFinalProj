@@ -28,9 +28,6 @@ public class camFollow3 : MonoBehaviour {
 	void LateUpdate () {
 		st=asd.GetComponent<jump> ().state;
 		if (st == 2) {
-			//offset = (transform.localPosition - c2p) * smooth;
-			//transform.position = Vector3.Lerp(transform.position, player.transform.position + c2p, Time.deltaTime);
-
 			transform.position = Vector3.Lerp(transform.position, player.transform.position + 
 				Quaternion.Euler (0, player.transform.eulerAngles.y, 0) * c2p, smooth*Time.deltaTime);
 			if (Input.GetKey (KeyCode.RightArrow)) {
@@ -42,16 +39,12 @@ public class camFollow3 : MonoBehaviour {
 			press = (Input.GetKey (KeyCode.LeftArrow)) ? press-0.05f : ((Input.GetKey (KeyCode.RightArrow)) ? press+0.05f : press*0.9f);
 			press = Mathf.Clamp (press, -1, 1);
 			lookatTra = player.transform.localPosition + new Vector3 (press * offset_ad, 0, 0);
-			//transform.localPosition = transform.localPosition - offset;
-			//nv.transform.position = new Vector3(nv.transform.position.x , 9.38f , nv.transform.position.z);
 			transform.LookAt(player.transform.TransformPoint(lookatTra));
 		} else if (st == 3){
 			transform.position = Vector3.Lerp(transform.position, player.transform.position + c3p, smooth*Time.deltaTime);
-			//offset = (transform.localPosition - c3p) * smooth;
 			transform.LookAt(player.transform);
 		} else {
 			transform.position = Vector3.Lerp(transform.position, player.transform.position + c1p, smooth*Time.deltaTime);
-			//offset = (transform.localPosition - c1p) * smooth;
 			transform.LookAt(player.transform);
 		}
 

@@ -22,19 +22,13 @@ public class camFollow1 : MonoBehaviour {
 	void LateUpdate () {
 		st=asd.GetComponent<jump> ().state;
 		if (st == 2) {
-			//offset = (transform.localPosition - c2p) * smooth;
-			//transform.position = Vector3.Lerp(transform.position, player.transform.position + c2p, Time.deltaTime);
 			transform.position = Vector3.Lerp(transform.position, player.transform.position + 
 				Quaternion.Euler (0, player.transform.eulerAngles.y, 0) * c2p, Time.deltaTime);
 		} else if (st == 3){
-				transform.position = Vector3.Lerp(transform.position, player.transform.position + c3p, Time.deltaTime);
-			//offset = (transform.localPosition - c3p) * smooth;
+			transform.position = Vector3.Lerp(transform.position, player.transform.position + c3p, Time.deltaTime);
 		} else {
 			transform.position = Vector3.Lerp(transform.position, player.transform.position + c1p, Time.deltaTime);
-			//offset = (transform.localPosition - c1p) * smooth;
 		}
-		//transform.localPosition = transform.localPosition - offset;
-		//nv.transform.position = new Vector3(nv.transform.position.x , 9.38f , nv.transform.position.z);
 		transform.LookAt(player.transform);
 	}
 }

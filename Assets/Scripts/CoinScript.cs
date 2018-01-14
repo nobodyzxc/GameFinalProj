@@ -16,17 +16,16 @@ public class CoinScript : MonoBehaviour {
 		GM = GameObject.Find ("GameManager").GetComponent<GameManager> ();
 		player = GameObject.FindGameObjectWithTag ("Player").transform;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-		if (gameObject.tag == "Ring") {
-			//transform.LookAt (player);
-			lookPos = player.position - transform.position;
-			lookPos.y = 0;
-			lastPos = Quaternion.LookRotation(lookPos);
-			transform.rotation = Quaternion.Slerp(transform.rotation,lastPos, Time.deltaTime * 100);
-		}
-			
+		//if (gameObject.tag == "Ring") {
+		//	//transform.LookAt (player);
+		//	lookPos = player.position - transform.position;
+		//	lookPos.y = 0;
+		//	lastPos = Quaternion.LookRotation(lookPos);
+		//	transform.rotation = Quaternion.Slerp(transform.rotation,lastPos, Time.deltaTime * 100);
+		//}
 	}
 	void OnTriggerEnter(Collider other){
 		if (other.gameObject.tag == "Player") {

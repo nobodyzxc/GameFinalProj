@@ -29,14 +29,12 @@ public class CoinScript : MonoBehaviour {
 
 			}
 			if (restCounter == 0) {
-
 				if(audioSource)
 					audioSource.Play ();
 
 				if(GM)
 					GM.addScore (CoinScore);
 				Destroy (this.gameObject);
-
 			}
 		}
 		//if (gameObject.tag == "Ring") {
@@ -58,13 +56,10 @@ public class CoinScript : MonoBehaviour {
 			touched = true;
 			if (gameObject.tag == "Ring") {
 				restCounter -= 1;
-				// add fuel
-				// show animation
-				print ("get ring");
-			} else {
+			} 
+			else {
 				if (audioSource)
 					audioSource.Play ();
-
 				if (GM)
 					GM.addScore (CoinScore);
 				Destroy (this.gameObject);

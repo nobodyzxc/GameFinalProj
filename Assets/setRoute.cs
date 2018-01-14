@@ -40,8 +40,8 @@ public class setRoute : MonoBehaviour {
 				var parts = str.Split (' ');
 				Vector3 pos = new Vector3 (float.Parse(parts[0]), float.Parse(parts[1]), float.Parse(parts[2]));
 				Quaternion rot = Quaternion.Euler(float.Parse(parts[3]), float.Parse(parts[4]), float.Parse(parts[5]));
-				if(counter == ring_show_gap)
-					Instantiate (ring, pos , rot);
+				if (counter == ring_show_gap)
+					Instantiate (ring, pos, rot);
 				else
 					Instantiate (coin, pos , rot);
 				counter++;

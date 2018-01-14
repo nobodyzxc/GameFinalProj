@@ -10,6 +10,9 @@ public class CoinScript : MonoBehaviour {
 	Transform player;
 	Vector3 lookPos;
 	Quaternion lastPos;
+	bool touched = false;
+
+	int restCounter = 20;
 	// Use this for initialization
 	void Start () {
 		audioSource = GetComponent<AudioSource> ();
@@ -19,6 +22,19 @@ public class CoinScript : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		if (restCounter < 20) {
+			restCounter -= 1;
+			if (restCounter == 0) {
+
+				if(audioSource)
+					audioSource.Play ();
+
+				if(GM)
+					GM.addScore (CoinScore);
+				Destroy (this.gameObject);
+
+			}
+		}
 		//if (gameObject.tag == "Ring") {
 		//	//transform.LookAt (player);
 		//	lookPos = player.position - transform.position;
@@ -28,14 +44,26 @@ public class CoinScript : MonoBehaviour {
 		//}
 	}
 	void OnTriggerEnter(Collider other){
+		if (gameObject.tag == "Ring") {
+			print ("ring collider");
+		}
 		if (other.gameObject.tag == "Player") {
-			if(audioSource)
-				audioSource.Play ();
+			if (touched)
+				return;
+			touched = true;
+			if (gameObject.tag == "Ring") {
+				restCounter -= 1;
+				// add fuel
+				// show animation
+				print ("get ring");
+			} else {
+				if (audioSource)
+					audioSource.Play ();
 
-			if(GM)
-				GM.addScore (CoinScore);
-			Destroy (this.gameObject);
-
+				if (GM)
+					GM.addScore (CoinScore);
+				Destroy (this.gameObject);
+			}
 		}
 	}
 }

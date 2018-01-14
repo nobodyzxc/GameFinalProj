@@ -12,7 +12,8 @@ public class CoinScript : MonoBehaviour {
 	Quaternion lastPos;
 	bool touched = false;
 
-	int restCounter = 20;
+	const int init = 20;
+	int restCounter = init;
 	// Use this for initialization
 	void Start () {
 		audioSource = GetComponent<AudioSource> ();
@@ -22,8 +23,11 @@ public class CoinScript : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if (restCounter < 20) {
+		if (restCounter < init) {
 			restCounter -= 1;
+			if (restCounter == init - 10) {
+
+			}
 			if (restCounter == 0) {
 
 				if(audioSource)
@@ -48,6 +52,7 @@ public class CoinScript : MonoBehaviour {
 			print ("ring collider");
 		}
 		if (other.gameObject.tag == "Player") {
+			print (gameObject.tag);
 			if (touched)
 				return;
 			touched = true;

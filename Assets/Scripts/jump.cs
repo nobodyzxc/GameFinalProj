@@ -9,6 +9,7 @@ public class jump : MonoBehaviour {
 	public Animator paraAnim;
 	Rigidbody rbody;
 	public int state = 0;
+	public int ringTrigger = 0;
 	float paraOpenTime = 0;
 	float charaSpeed;
 	Vector3 chara_pre_Pos;
@@ -54,10 +55,6 @@ public class jump : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
-
-
-
 		if(state >= 1 && state < 3)
 			CF.relativeForce = new Vector3 (0f, -gra+2, 0f);
 
@@ -68,6 +65,8 @@ public class jump : MonoBehaviour {
 			Vector3 nv =  transform.forward.normalized
 				* (rbody.velocity.x / rbody.velocity.normalized.x)
 				+ new Vector3(0 , -Mathf.Sin((rbody.rotation.eulerAngles.x * Mathf.Deg2Rad)) , 0) * Time.deltaTime * 10;
+			if (ringTrigger == 60)
+				nv += transform.forward.normalized * 5;
 			if (!float.IsNaN (nv.x))
 				rbody.velocity = nv;
 			float torque = 0.25f;
@@ -83,8 +82,7 @@ public class jump : MonoBehaviour {
 				transform.eulerAngles = new Vector3 (euler.x, euler.y, nextZ);
 				rbody.AddTorque (0, -torque, 0);
 			}
-
-
+				
 			if (Input.GetKey (KeyCode.Z) && JFCS.fuelTank > 0) {
 				transform.Rotate (new Vector3 (-1, 0, 0));
 			} else {
@@ -93,23 +91,28 @@ public class jump : MonoBehaviour {
 			}
 		}
 		if (state == 3) {
+			transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, transform.eulerAngles.y, 0), Time.deltaTime);
 			CF.enabled = false;
 			float nextX;
 			float speed = 10 * Time.deltaTime;
 			if (Input.GetKey (KeyCode.RightArrow)) {
-				transform.position += new Vector3 (-speed, 0, 0);
+				transform.Rotate (0, speed * 10, 0);
+				//transform.position += transform.right * speed;
 			}
 			if (Input.GetKey (KeyCode.LeftArrow)) {
-				transform.position += new Vector3 (speed, 0, 0);
+				transform.Rotate (0, -speed * 10, 0);
+				//transform.position += -transform.right * speed;
 			}
 
 			if (Input.GetKey (KeyCode.UpArrow)) {
-				nextX = (euler.x >= 360 - fix || euler.x <= fix)? euler.x - 1 : approach(euler.x, 360 - fix, fix) - 1;
-				transform.eulerAngles = new Vector3 (nextX, euler.y, euler.z);
-			}
-			if (Input.GetKey (KeyCode.DownArrow)) {
 				nextX = (euler.x >= 360 - fix || euler.x <= fix)? euler.x  + 1 : approach(euler.x, 360 - fix, fix) + 1;
 				transform.eulerAngles = new Vector3 (nextX, euler.y, euler.z);
+				transform.position += transform.forward * speed;
+			}
+			if (Input.GetKey (KeyCode.DownArrow)) {
+				nextX = (euler.x >= 360 - fix || euler.x <= fix)? euler.x - 1 : approach(euler.x, 360 - fix, fix) - 1;
+				transform.eulerAngles = new Vector3 (nextX, euler.y, euler.z);
+				transform.position += -transform.forward * speed;
 			}
 
 		}
@@ -204,5 +207,9 @@ public class jump : MonoBehaviour {
 		yield return new WaitForSeconds(5.0f);
 		BackGroundMusic.SetActive (false);
 		RetryPanel.SetActive (true);
+	}
+	void OnTriggerEnter(Collider other){
+		if (other.gameObject.tag == "Ring")
+			ringTrigger = 60;
 	}
 }

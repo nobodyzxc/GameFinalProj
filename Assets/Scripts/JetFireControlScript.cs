@@ -7,7 +7,7 @@ public class JetFireControlScript : MonoBehaviour {
 	public ParticleSystem Leftfire;
 	public ParticleSystem Rightfire;
 	public Slider fuel;
-	public float fuelTank = 1000;
+	public float fuelTank = 100;
 	// Use this for initialization
 	void Start () {
 		
@@ -15,6 +15,8 @@ public class JetFireControlScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (GetComponent<jump> ().ringTrigger == 60)
+			fuelTank = Mathf.Max (500, fuelTank + 100);
 		fuel.value = fuelTank;
 		if (Input.GetKey(KeyCode.Z)) {
 			if (fuelTank <= 0) {

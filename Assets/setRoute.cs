@@ -10,11 +10,14 @@ public class setRoute : MonoBehaviour {
 	int rec_gap = 0;
 	int ring_gap = 30;
 	int ring_show_gap = 10;
+	float gerGap = 10f;
 
 	bool SETROUTE = false;
 	bool ENABLE = true;
 	public GameObject coin;
 	public GameObject ring;
+	Vector3 pos;
+	Vector3 prePos = Vector3.zero;
 	GameObject player;
 
 	// Use this for initialization
@@ -38,14 +41,18 @@ public class setRoute : MonoBehaviour {
 				if (str == null)
 					break;
 				var parts = str.Split (' ');
-				Vector3 pos = new Vector3 (float.Parse(parts[0]), float.Parse(parts[1]), float.Parse(parts[2]));
+				pos = new Vector3 (float.Parse(parts[0]), float.Parse(parts[1]), float.Parse(parts[2]));
 				Quaternion rot = Quaternion.Euler(float.Parse(parts[3]), float.Parse(parts[4]), float.Parse(parts[5]));
-				if (counter == ring_show_gap)
+				if (prePos != Vector3.zero && Vector3.Distance (prePos, pos) < gerGap)
+					continue;
+				if (counter == ring_show_gap) {
 					Instantiate (ring, pos, rot);
+				}
 				else
 					Instantiate (coin, pos , rot);
 				counter++;
 				counter %= ring_gap;
+				prePos = pos;
 			}
 		}
 	}
@@ -60,7 +67,7 @@ public class setRoute : MonoBehaviour {
 			if (rec_gap == 0) {
 				rec_gap = 3;
 				writer.WriteLine (player.transform.position.x + " " + player.transform.position.y + " " + player.transform.position.z
-					+ " " + player.transform.rotation.x + " " + player.transform.rotation.y + " " + player.transform.rotation.z);
+					+ " " + player.transform.eulerAngles.x + " " + player.transform.eulerAngles.y+ " " + player.transform.eulerAngles.z);
 				print ("write file");
 			}
 			rec_gap--;

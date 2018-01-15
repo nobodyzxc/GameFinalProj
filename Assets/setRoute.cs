@@ -12,7 +12,7 @@ public class setRoute : MonoBehaviour {
 	int ring_show_gap = 10;
 	float gerGap = 10f;
 
-	bool SETROUTE = false;
+	bool SETROUTE = !true;
 	bool ENABLE = true;
 	public GameObject coin;
 	public GameObject ring;

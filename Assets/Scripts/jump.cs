@@ -29,6 +29,8 @@ public class jump : MonoBehaviour {
 	public AudioClip[] deathAudio;
 	AudioSource audioSource;
 	AudioClip deathClip;
+	public AudioClip ringClip;
+	public AudioClip coinClip;
 
 	float escapeTime = 0f;
 	public GameObject bloods;
@@ -212,7 +214,13 @@ public class jump : MonoBehaviour {
 		RetryPanel.SetActive (true);
 	}
 	void OnTriggerEnter(Collider other){
-		if (other.gameObject.tag == "Ring")
+		if (other.gameObject.tag == "Ring") {
 			ringTrigger = 60;
+			audioSource.clip = ringClip;
+			audioSource.Play ();
+		} else if (other.gameObject.tag == "Coin") {
+			audioSource.clip = coinClip;
+			audioSource.Play ();		
+		}
 	}
 }

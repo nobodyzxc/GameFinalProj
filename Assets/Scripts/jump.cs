@@ -29,6 +29,8 @@ public class jump : MonoBehaviour {
 	public AudioClip[] deathAudio;
 	AudioSource audioSource;
 	AudioClip deathClip;
+	public AudioClip ringClip;
+	public AudioClip coinClip;
 
 	float escapeTime = 0f;
 	public GameObject bloods;
@@ -83,7 +85,9 @@ public class jump : MonoBehaviour {
 				rbody.AddTorque (0, -torque, 0);
 			}
 				
-			if (Input.GetKey (KeyCode.Z) && JFCS.fuelTank > 0) {
+			if (Input.GetKey (KeyCode.Z) && JFCS.fuelTank > 0){
+				if (transform.eulerAngles.x < 180)
+					transform.Rotate (new Vector3 (-2, 0, 0));
 				transform.Rotate (new Vector3 (-1, 0, 0));
 			} else {
 				Vector3 eu = transform.eulerAngles;
@@ -138,6 +142,7 @@ public class jump : MonoBehaviour {
 				rbody.drag = 0.8f; /* parachute drag */
 				paraOpenTime = 1;
 			} else if (state == 4) {
+				
 				rbody.drag = 0f;
 				animtor.SetTrigger ("dropParachute");
 				escapeTime += Time.deltaTime;
@@ -209,7 +214,13 @@ public class jump : MonoBehaviour {
 		RetryPanel.SetActive (true);
 	}
 	void OnTriggerEnter(Collider other){
-		if (other.gameObject.tag == "Ring")
+		if (other.gameObject.tag == "Ring") {
 			ringTrigger = 60;
+			audioSource.clip = ringClip;
+			audioSource.Play ();
+		} else if (other.gameObject.tag == "Coin") {
+			audioSource.clip = coinClip;
+			audioSource.Play ();		
+		}
 	}
 }

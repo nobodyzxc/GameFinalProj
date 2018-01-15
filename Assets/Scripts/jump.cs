@@ -83,7 +83,9 @@ public class jump : MonoBehaviour {
 				rbody.AddTorque (0, -torque, 0);
 			}
 				
-			if (Input.GetKey (KeyCode.Z) && JFCS.fuelTank > 0) {
+			if (Input.GetKey (KeyCode.Z) && JFCS.fuelTank > 0){
+				if (transform.eulerAngles.x < 180)
+					transform.Rotate (new Vector3 (-2, 0, 0));
 				transform.Rotate (new Vector3 (-1, 0, 0));
 			} else {
 				Vector3 eu = transform.eulerAngles;
@@ -138,6 +140,7 @@ public class jump : MonoBehaviour {
 				rbody.drag = 0.8f; /* parachute drag */
 				paraOpenTime = 1;
 			} else if (state == 4) {
+				
 				rbody.drag = 0f;
 				animtor.SetTrigger ("dropParachute");
 				escapeTime += Time.deltaTime;

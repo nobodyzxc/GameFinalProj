@@ -175,10 +175,11 @@ public class jump : MonoBehaviour {
 			//rbody.velocity = Vector3.zero;
 			rbody.freezeRotation = true;
 			if (SWAT.transform.parent != null) {
-				transform.GetChild (1).parent = transform.GetChild (0);
-				SWAT.transform.parent = SWAT.transform.parent.parent;
-
-				state = 8 + 9;
+				if (transform.childCount > 1) {
+					transform.GetChild (1).parent = transform.GetChild (0);
+					SWAT.transform.parent = SWAT.transform.parent.parent;
+					state = 8 + 9;
+				}
 			}
 			if (state != 2 && paraOpenTime >= deadTime && escapeTime < deadTime-1) {
 				if (!Victory) {

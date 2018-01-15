@@ -145,7 +145,7 @@ public class jump : MonoBehaviour {
 				
 				rbody.drag = 0f;
 				animtor.SetTrigger ("dropParachute");
-				escapeTime += Time.deltaTime;
+
 				parachuteInst.transform.parent = parachuteInst.transform.parent.parent.parent.parent;
 				parachuteInst.AddComponent<Rigidbody> ();
 				parachuteInst.GetComponent<Rigidbody> ().velocity = -rbody.velocity;
@@ -163,11 +163,15 @@ public class jump : MonoBehaviour {
 				//print (rbody.velocity);
 		}
 		chara_pre_Pos = transform.position;
+		if (state == 4) {
+			escapeTime += Time.deltaTime;
+		}
 	}
 
 
 	void OnCollisionEnter(Collision collision){
 		if (collision.gameObject.tag == "Ground") {
+			
 			//rbody.velocity = Vector3.zero;
 			rbody.freezeRotation = true;
 			if (SWAT.transform.parent != null) {
@@ -176,7 +180,7 @@ public class jump : MonoBehaviour {
 
 				state = 8 + 9;
 			}
-			if (state != 2 && paraOpenTime >= deadTime) {
+			if (state != 2 && paraOpenTime >= deadTime && escapeTime < deadTime-1) {
 				if (!Victory) {
 					animtor.SetTrigger ("Fail");
 					StartCoroutine (RetryGame ());
@@ -192,12 +196,13 @@ public class jump : MonoBehaviour {
 				state = 5;
 				animtor.SetInteger ("state", 5);
 				playerDead ();
-			} else if(!parachuteOpen || escapeTime > deadTime){
+			} else if(!parachuteOpen || escapeTime > deadTime-1){
 				print (paraOpenTime+" not open");
 				state = 6;
 				animtor.SetInteger ("state", 6);
 				playerDead ();
 			}
+			print ("Escape "+escapeTime);
 		}
 	}
 	void playerDead(){

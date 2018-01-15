@@ -46,11 +46,13 @@ public class JetFireControlScript : MonoBehaviour {
 				Rightfire.Play ();
 			}
 		}
-		if (Input.GetKeyUp(KeyCode.Z) || GetComponent<jump>().state >= 3) {
+		if (Input.GetKeyUp(KeyCode.Z) || GetComponent<jump> ().state >= 3) {
 			Leftfire.Stop ();
 			Rightfire.Stop ();
-			particle.Stop();
 		}
+
+		if (GetComponent<jump> ().state >= 3)
+			particle.Stop();
 
 	}
 }

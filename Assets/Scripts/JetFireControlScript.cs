@@ -18,7 +18,7 @@ public class JetFireControlScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (GetComponent<jump> ().ringTrigger == 60) {
-			fuelTank = Mathf.Max (50, fuelTank + 50);
+			fuelTank = Mathf.Min (50, fuelTank + 50);
 			fireFlag = true;
 			particle.Play();
 		}
